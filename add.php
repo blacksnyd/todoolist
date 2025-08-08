@@ -16,7 +16,7 @@
     if(empty($taskDesc)) {
       $errors[] = "Description manquante";
     }
-    if(empty($taskPriority) || $taskPriority == "status") {
+    if(empty($taskStatus) || $taskPriority == "status") {
       $errors[] = "Choix du status manquant";
     }
     if(empty($taskPriority) || $taskPriority == "priority") {
