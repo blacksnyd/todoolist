@@ -3,6 +3,7 @@
 
   $errors = [];
 
+
   if($_SERVER["REQUEST_METHOD"] === "POST") {
     $taskTitle = $_POST["taskTitle"] ?? "";
     $taskDesc = $_POST["taskDesc"] ?? "";
@@ -28,8 +29,8 @@
 
     if(empty($errors)) {
       try {
-        $pdo = dbLog();
-        $insert = $pdo->prepare("INSERT INTO tasks(title, description, status, priority, due_date) VALUES (?, ?, ?, ?, ?)");
+        $taskId = $_GET["id"];
+        $insert = $pdo->prepare("UPDATE tasks SET title = ?, description = ?, status = ?, priority = ?, due_date = ? WHERE id = $taskId");
         $insert->execute([$taskTitle, $taskDesc, $taskStatus, $taskPriority, $taskDueDate]);
         header("location: index.php");
         exit();
@@ -55,7 +56,7 @@
     <?php include "includes/header.php" ?>
     <main>
       <div class="content">
-        <h1>Ajouter une tâche</h1>
+        <h1>Modifier une tâche</h1>
         <?php if (!empty($errors)) { ?>
           <div class="alert alert-dismissible alert-danger">
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
