@@ -41,7 +41,7 @@
                 <td><?= $task["title"] ?></td>
                 <td><?= $task["description"] ?></td>
                 <td><?= $task["status"] ?></td>
-                <td><?= $task["status"] ?></td>
+                <td><?= $task["priority"] ?></td>
                 <td><?= $task["due_date"] ?></td>
                 <td><?= $task["created_at"] ?></td>
                 <td>
