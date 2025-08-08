@@ -1,5 +1,4 @@
 <?php
-
 function dbLog() {
   $host = "localhost";
   $dbname = "todoolist";
