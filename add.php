@@ -17,9 +17,23 @@
   <body>
     <?php include "includes/header.php" ?>
     <main>
-      <div class="table-container">
+      <div class="content">
         <h1>Ajouter une tâche</h1>
-
+        <form action="">
+          <label for="taskTitle" class="form-label mt-4">Titre de la tâche :</label>
+          <input type="email" class="form-control" id="taskTitle" name="taskTitle" placeholder="Titre de la tâche">
+          <label for="taskDesc" class="form-label mt-4">Description de la tâche :</label>
+          <textarea class="form-control" id="taskDesc" name="taskDesc"rows="3" placeholder="Description de la tâche"></textarea>
+          <label for="taskPriority" class="form-label mt-4">Priorité</label>
+          <select class="form-select" id="taskPriority">
+            <option>basse</option>
+            <option>moyenne</option>
+            <option>haute</option>
+          </select>
+          <label for="taskDueDate" class="form-label mt-4">Date butoire de la tâche :</label>
+          <input type="date" class="form-control" id="taskDueDate" name="taskDueDate" placeholder="Date butoire de la tâche">
+          <input type="submit" class="btn btn-primary mt-4" value="Créer"></input>
+        </form>
       </div>
     </main>
   </body>
