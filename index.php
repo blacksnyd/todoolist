@@ -1,3 +1,10 @@
+<?php
+  require_once "config/db.php";
+
+
+  $pdo = dbLog();
+  var_dump($pdo);
+?>
 <html lang="en">
   <head>
     <meta charset="UTF-8">
@@ -9,5 +16,8 @@
   </head>
   <body>
     <?php include "includes/header.php" ?>
+    <main>
+
+    </main>
   </body>
 </html>
