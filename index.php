@@ -1,11 +1,13 @@
 <?php
   require_once "config/db.php";
 
-
   $pdo = dbLog();
-  var_dump($pdo);
+  $request = $pdo->prepare("SELECT * FROM tasks");
+  $request->execute();
+  $tasks = $request->fetchAll();
+
 ?>
-<html lang="en">
+<html lang="fr">
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
