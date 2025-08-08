@@ -8,6 +8,8 @@
   $request = $pdo->prepare("SELECT * FROM tasks WHERE id = ?");
   $request->execute([$taskId]);
   $currentTask = $request->fetch();
+
+
   if($_SERVER["REQUEST_METHOD"] === "POST") {
     $taskTitle = !empty($_POST["taskTitle"]) ? $_POST["taskTitle"] : $currentTask["title"];
     $taskDesc = !empty($_POST["taskDesc"]) ? $_POST["taskDesc"] : $currentTask["description"];
@@ -15,8 +17,8 @@
     $taskPriority = !empty($_POST["taskPriority"]) ? $_POST["taskPriority"] : $currentTask["priority"];
     $taskDueDate = !empty($_POST["taskDueDate"]) ? $_POST["taskDueDate"] : $currentTask["due_date"];
     try {
-      $insert = $pdo->prepare("UPDATE tasks SET title = ?, description = ?, status = ?, priority = ?, due_date = ? WHERE id = $taskId");
-      $insert->execute([$taskTitle, $taskDesc, $taskStatus, $taskPriority, $taskDueDate]);
+      $insert = $pdo->prepare("UPDATE tasks SET title = ?, description = ?, status = ?, priority = ?, due_date = ? WHERE id = ?");
+      $insert->execute([$taskTitle, $taskDesc, $taskStatus, $taskPriority, $taskDueDate, $taskId]);
       header("location: index.php");
       exit();
     } catch (PDOException $e) {
@@ -53,7 +55,7 @@
         <?php } ?>
         <form method="post">
           <label for="taskTitle" class="form-label mt-4">Titre de la tâche :</label>
-          <input type="text" class="form-control" id="taskTitle" name="taskTitle" placeholder="Titre de la tâche">
+          <input type="text" class="form-control" id="taskTitle" name="taskTitle" placeholder="Titre de la tâche" value="<?= $currentTask["title"] ?>">
           <label for="taskDesc" class="form-label mt-4">Description de la tâche :</label>
           <textarea class="form-control" id="taskDesc" name="taskDesc"rows="3" placeholder="Description de la tâche"></textarea>
           <label for="taskStatus" class="form-label mt-4">Status</label>
