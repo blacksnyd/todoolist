@@ -1,12 +1,42 @@
 <?php
   require_once "config/db.php";
 
+  $errors = [];
+
   if($_SERVER["REQUEST_METHOD"] === "POST") {
     $taskTitle = $_POST["taskTitle"] ?? "";
     $taskDesc = $_POST["taskDesc"] ?? "";
+    $taskStatus = $_POST["taskStatus"] ?? "";
     $taskPriority = $_POST["taskPriority"] ?? "";
     $taskDueDate = $_POST["taskDueDate"] ?? "";
 
+    if(empty($taskTitle)) {
+      $errors[] = "Titre manquant";
+    }
+    if(empty($taskDesc)) {
+      $errors[] = "Description manquante";
+    }
+    if(empty($taskPriority) || $taskPriority == "status") {
+      $errors[] = "Choix du status manquant";
+    }
+    if(empty($taskPriority) || $taskPriority == "priority") {
+      $errors[] = "Choix de priorité manquant";
+    }
+    if(empty($taskDueDate)) {
+      $errors[] = "Date butoire manquante";
+    }
+
+    if(empty($errors)) {
+      try {
+        $pdo = dbLog();
+        $insert = $pdo->prepare("INSERT INTO tasks(title, description, status, priority, due_date) VALUES (?, ?, ?, ?, ?)");
+        $insert->execute([$taskTitle, $taskDesc, $taskStatus, $taskPriority, $taskDueDate]);
+        header("location: index.php");
+        exit();
+      } catch (PDOException $e) {
+        $errors[] = "Erreur : $e";
+      }
+    }
   }
 ?>
 <html lang="fr">
@@ -26,13 +56,30 @@
     <main>
       <div class="content">
         <h1>Ajouter une tâche</h1>
+        <?php if (!empty($errors)) { ?>
+          <div class="alert alert-dismissible alert-danger">
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            <h4 class="alert-heading">Attention !</h4>
+            <?php foreach ($errors as $error) { ?>
+                <?= $error ?><br>
+            <?php } ?>
+          </div>
+        <?php } ?>
         <form method="post">
           <label for="taskTitle" class="form-label mt-4">Titre de la tâche :</label>
           <input type="text" class="form-control" id="taskTitle" name="taskTitle" placeholder="Titre de la tâche">
           <label for="taskDesc" class="form-label mt-4">Description de la tâche :</label>
           <textarea class="form-control" id="taskDesc" name="taskDesc"rows="3" placeholder="Description de la tâche"></textarea>
+          <label for="taskStatus" class="form-label mt-4">Status</label>
+          <select class="form-select" name="taskStatus" id="taskStatus">
+            <option value="status">Status</option>
+            <option value="à faire">à faire</option>
+            <option value="en cours">en cours</option>
+            <option value="terminée">terminée</option>
+          </select>
           <label for="taskPriority" class="form-label mt-4">Priorité</label>
           <select class="form-select" name="taskPriority" id="taskPriority">
+            <option value="priority">Priorité</option>
             <option value="basse">basse</option>
             <option value="moyenne">moyenne</option>
             <option value="haute">haute</option>
