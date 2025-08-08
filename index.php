@@ -1,4 +1,13 @@
-<html lang="en">
+<?php
+  require_once "config/db.php";
+
+  $pdo = dbLog();
+  $request = $pdo->prepare("SELECT * FROM tasks");
+  $request->execute();
+  $tasks = $request->fetchAll();
+
+?>
+<html lang="fr">
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,5 +18,8 @@
   </head>
   <body>
     <?php include "includes/header.php" ?>
+    <main>
+
+    </main>
   </body>
 </html>
