@@ -1,6 +1,13 @@
 <?php
   require_once "config/db.php";
 
+  if($_SERVER["REQUEST_METHOD"] === "POST") {
+    $taskTitle = $_POST["taskTitle"] ?? "";
+    $taskDesc = $_POST["taskDesc"] ?? "";
+    $taskPriority = $_POST["taskPriority"] ?? "";
+    $taskDueDate = $_POST["taskDueDate"] ?? "";
+
+  }
 ?>
 <html lang="fr">
   <head>
@@ -19,16 +26,16 @@
     <main>
       <div class="content">
         <h1>Ajouter une tâche</h1>
-        <form action="">
+        <form method="post">
           <label for="taskTitle" class="form-label mt-4">Titre de la tâche :</label>
-          <input type="email" class="form-control" id="taskTitle" name="taskTitle" placeholder="Titre de la tâche">
+          <input type="text" class="form-control" id="taskTitle" name="taskTitle" placeholder="Titre de la tâche">
           <label for="taskDesc" class="form-label mt-4">Description de la tâche :</label>
           <textarea class="form-control" id="taskDesc" name="taskDesc"rows="3" placeholder="Description de la tâche"></textarea>
           <label for="taskPriority" class="form-label mt-4">Priorité</label>
-          <select class="form-select" id="taskPriority">
-            <option>basse</option>
-            <option>moyenne</option>
-            <option>haute</option>
+          <select class="form-select" name="taskPriority" id="taskPriority">
+            <option value="basse">basse</option>
+            <option value="moyenne">moyenne</option>
+            <option value="haute">haute</option>
           </select>
           <label for="taskDueDate" class="form-label mt-4">Date butoire de la tâche :</label>
           <input type="date" class="form-control" id="taskDueDate" name="taskDueDate" placeholder="Date butoire de la tâche">
