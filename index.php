@@ -46,7 +46,7 @@
                 <td><?= $task["created_at"] ?></td>
                 <td>
                   <div class="table-actions">
-                    <button type="button" class="btn btn-danger"><i class="fa-solid fa-trash"></i></button>
+                    <a href="update.php?id=<?= $task["id"] ?>" class="btn btn-danger"><i class="fa-solid fa-trash"></i></a>
                     <button type="button" class="btn btn-info"><i class="fa-solid fa-pen-to-square"></i></button>
                   </div>
                 </td>

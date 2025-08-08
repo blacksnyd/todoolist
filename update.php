@@ -3,42 +3,27 @@
 
   $errors = [];
 
-
+  $taskId = $_GET["id"];
+  $pdo = dbLog();
+  $request = $pdo->prepare("SELECT * FROM tasks WHERE id = ?");
+  $request->execute([$taskId]);
+  $currentTask = $request->fetch();
   if($_SERVER["REQUEST_METHOD"] === "POST") {
-    $taskTitle = $_POST["taskTitle"] ?? "";
-    $taskDesc = $_POST["taskDesc"] ?? "";
-    $taskStatus = $_POST["taskStatus"] ?? "";
-    $taskPriority = $_POST["taskPriority"] ?? "";
-    $taskDueDate = $_POST["taskDueDate"] ?? "";
-
-    if(empty($taskTitle)) {
-      $errors[] = "Titre manquant";
-    }
-    if(empty($taskDesc)) {
-      $errors[] = "Description manquante";
-    }
-    if(empty($taskStatus) || $taskPriority == "status") {
-      $errors[] = "Choix du status manquant";
-    }
-    if(empty($taskPriority) || $taskPriority == "priority") {
-      $errors[] = "Choix de priorité manquant";
-    }
-    if(empty($taskDueDate)) {
-      $errors[] = "Date butoire manquante";
-    }
-
-    if(empty($errors)) {
-      try {
-        $taskId = $_GET["id"];
-        $insert = $pdo->prepare("UPDATE tasks SET title = ?, description = ?, status = ?, priority = ?, due_date = ? WHERE id = $taskId");
-        $insert->execute([$taskTitle, $taskDesc, $taskStatus, $taskPriority, $taskDueDate]);
-        header("location: index.php");
-        exit();
-      } catch (PDOException $e) {
-        $errors[] = "Erreur : $e";
-      }
+    $taskTitle = !empty($_POST["taskTitle"]) ? $_POST["taskTitle"] : $currentTask["title"];
+    $taskDesc = !empty($_POST["taskDesc"]) ? $_POST["taskDesc"] : $currentTask["description"];
+    $taskStatus = !empty($_POST["taskStatus"]) ? $_POST["taskStatus"] : $currentTask["status"];
+    $taskPriority = !empty($_POST["taskPriority"]) ? $_POST["taskPriority"] : $currentTask["priority"];
+    $taskDueDate = !empty($_POST["taskDueDate"]) ? $_POST["taskDueDate"] : $currentTask["due_date"];
+    try {
+      $insert = $pdo->prepare("UPDATE tasks SET title = ?, description = ?, status = ?, priority = ?, due_date = ? WHERE id = $taskId");
+      $insert->execute([$taskTitle, $taskDesc, $taskStatus, $taskPriority, $taskDueDate]);
+      header("location: index.php");
+      exit();
+    } catch (PDOException $e) {
+      $errors[] = "Erreur : $e";
     }
   }
+
 ?>
 <html lang="fr">
   <head>
@@ -73,14 +58,12 @@
           <textarea class="form-control" id="taskDesc" name="taskDesc"rows="3" placeholder="Description de la tâche"></textarea>
           <label for="taskStatus" class="form-label mt-4">Status</label>
           <select class="form-select" name="taskStatus" id="taskStatus">
-            <option value="status">Status</option>
             <option value="à faire">à faire</option>
             <option value="en cours">en cours</option>
             <option value="terminée">terminée</option>
           </select>
           <label for="taskPriority" class="form-label mt-4">Priorité</label>
           <select class="form-select" name="taskPriority" id="taskPriority">
-            <option value="priority">Priorité</option>
             <option value="basse">basse</option>
             <option value="moyenne">moyenne</option>
             <option value="haute">haute</option>
