@@ -5,6 +5,14 @@
   $request = $pdo->prepare("SELECT * FROM tasks");
   $request->execute();
   $tasks = $request->fetchAll();
+
+  if(isset($_GET["delete"]) && isset($_GET["id"])) {
+    $taskId = $_GET["id"];
+    $request = $pdo->prepare("DELETE FROM tasks WHERE id = ?");
+    $request->execute([$taskId]);
+    header("location: index.php");
+    exit();
+  }
 ?>
 <html lang="fr">
   <head>
@@ -41,13 +49,13 @@
                 <td><?= $task["title"] ?></td>
                 <td><?= $task["description"] ?></td>
                 <td><?= $task["status"] ?></td>
-                <td><?= $task["status"] ?></td>
+                <td><?= $task["priority"] ?></td>
                 <td><?= $task["due_date"] ?></td>
                 <td><?= $task["created_at"] ?></td>
                 <td>
                   <div class="table-actions">
-                    <button type="button" class="btn btn-danger"><i class="fa-solid fa-trash"></i></button>
-                    <button type="button" class="btn btn-info"><i class="fa-solid fa-pen-to-square"></i></button>
+                    <a href="?delete=1&id=<?= $task["id"] ?>" class="btn btn-danger"><i class="fa-solid fa-trash"></i></a>
+                    <a href="update.php?id=<?= $task["id"] ?>" class="btn btn-info"><i class="fa-solid fa-pen-to-square"></i></a>
                   </div>
                 </td>
               </tr>

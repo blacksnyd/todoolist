@@ -5,9 +5,10 @@ main {
   margin: 0 auto;
 }
 .content > h1{
+.content > h1{
   text-align: center;
 }
-.content > table {
+table {
   margin: 70px 0 0 0 !important;
 }
 .table-actions{
