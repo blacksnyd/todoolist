@@ -21,7 +21,7 @@
   <body>
     <?php include "includes/header.php" ?>
     <main>
-      <div class="table-container">
+      <div class="content">
         <h1>Liste des tâches en cours</h1>
         <table class="table">
           <thead>
