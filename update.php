@@ -57,21 +57,21 @@
           <label for="taskTitle" class="form-label mt-4">Titre de la tâche :</label>
           <input type="text" class="form-control" id="taskTitle" name="taskTitle" placeholder="Titre de la tâche" value="<?= $currentTask["title"] ?>">
           <label for="taskDesc" class="form-label mt-4">Description de la tâche :</label>
-          <textarea class="form-control" id="taskDesc" name="taskDesc"rows="3" placeholder="Description de la tâche"></textarea>
+          <textarea class="form-control" id="taskDesc" name="taskDesc"rows="3" placeholder="Description de la tâche"><?= $currentTask["title"] ?></textarea>
           <label for="taskStatus" class="form-label mt-4">Status</label>
           <select class="form-select" name="taskStatus" id="taskStatus">
-            <option value="à faire">à faire</option>
-            <option value="en cours">en cours</option>
-            <option value="terminée">terminée</option>
+            <option value="à faire"<?= $currentTask["status"] === 'à faire' ? 'selected' : '' ?>>à faire</option>
+            <option value="en cours" <?= $currentTask["status"] === 'en cours' ? 'selected' : '' ?>>en cours</option>
+            <option value="terminée" <?= $currentTask["status"] === 'terminée' ? 'selected' : '' ?>>terminée</option>
           </select>
           <label for="taskPriority" class="form-label mt-4">Priorité</label>
           <select class="form-select" name="taskPriority" id="taskPriority">
-            <option value="basse">basse</option>
-            <option value="moyenne">moyenne</option>
-            <option value="haute">haute</option>
+            <option value="basse" <?= $currentTask["priority"] === 'basse' ? 'selected' : '' ?>>basse</option>
+            <option value="moyenne" <?= $currentTask["priority"] === 'moyenne' ? 'selected' : '' ?>>moyenne</option>
+            <option value="haute" <?= $currentTask["priority"] === 'haute' ? 'selected' : '' ?>>haute</option>
           </select>
           <label for="taskDueDate" class="form-label mt-4">Date butoire de la tâche :</label>
-          <input type="date" class="form-control" id="taskDueDate" name="taskDueDate" placeholder="Date butoire de la tâche">
+          <input type="date" class="form-control" id="taskDueDate" name="taskDueDate" placeholder="Date butoire de la tâche" value="<?= $currentTask["due_date"] ?>">
           <input type="submit" class="btn btn-primary mt-4" value="Créer"></input>
         </form>
       </div>

@@ -13,6 +13,13 @@
     header("location: index.php");
     exit();
   }
+  if(isset($_GET["filter"]) && isset($_GET["priority"]) ) {
+    $priority = $_GET["priority"];
+    $request = $pdo->prepare("SELECT * FROM tasks WHERE priority = ?");
+    $request->execute([$priority]);
+    $fetchAll = $request->fetchAll();
+  }
+  $displayTasks = (isset($_GET["filter"]) && isset($_GET["priority"])) ? $fetchAll : $tasks;
 ?>
 <html lang="fr">
   <head>
@@ -31,6 +38,11 @@
     <main>
       <div class="content">
         <h1>Liste des tâches en cours</h1>
+        <div class="filter">
+          <a href="?filter=1&priority=haute" class="btn btn-danger">Haute</i></a>
+          <a href="?filter=1&priority=moyenne" class="btn btn-warning">Moyenne</i></a>
+          <a href="?filter=1&priority=basse" class="btn btn-info">Basse</i></a>
+        </div>
         <table class="table">
           <thead>
             <tr>
@@ -44,21 +56,21 @@
             </tr>
           </thead>
           <tbody>
-            <?php foreach ($tasks as $task ) { ?>
-              <tr>
-                <td><?= $task["title"] ?></td>
-                <td><?= $task["description"] ?></td>
-                <td><?= $task["status"] ?></td>
-                <td><?= $task["priority"] ?></td>
-                <td><?= $task["due_date"] ?></td>
-                <td><?= $task["created_at"] ?></td>
-                <td>
-                  <div class="table-actions">
-                    <a href="?delete=1&id=<?= $task["id"] ?>" class="btn btn-danger"><i class="fa-solid fa-trash"></i></a>
-                    <a href="update.php?id=<?= $task["id"] ?>" class="btn btn-info"><i class="fa-solid fa-pen-to-square"></i></a>
-                  </div>
-                </td>
-              </tr>
+            <?php foreach ($displayTasks as $task) { ?>
+                <tr>
+                  <td><?= $task["title"] ?></td>
+                  <td><?=  substr($task["description"], 0, 20) ?> Voir plus...</td>
+                  <td><?= $task["status"] ?></td>
+                  <td><?= $task["priority"] ?></td>
+                  <td><?= $task["due_date"] ?></td>
+                  <td><?= $task["created_at"] ?></td>
+                  <td>
+                    <div class="table-actions">
+                      <a href="?delete=1&id=<?= $task["id"] ?>" class="btn btn-danger"><i class="fa-solid fa-trash"></i></a>
+                      <a href="update.php?id=<?= $task["id"] ?>" class="btn btn-info"><i class="fa-solid fa-pen-to-square"></i></a>
+                    </div>
+                  </td>
+                </tr>
             <?php } ?>
           </tbody>
         </table>
