@@ -1,5 +1,6 @@
 <?php
   require_once "config/db.php";
+  session_start();
 
   $errors = [];
 
@@ -29,14 +30,19 @@
     if(empty($errors)) {
       try {
         $pdo = dbLog();
-        $insert = $pdo->prepare("INSERT INTO tasks(title, description, status, priority, due_date) VALUES (?, ?, ?, ?, ?)");
-        $insert->execute([$taskTitle, $taskDesc, $taskStatus, $taskPriority, $taskDueDate]);
+        $userId = $_SESSION["user"]["id"];
+        $insert = $pdo->prepare("INSERT INTO tasks(title, description, status, priority, due_date, user_id) VALUES (?, ?, ?, ?, ?, ?)");
+        $insert->execute([$taskTitle, $taskDesc, $taskStatus, $taskPriority, $taskDueDate, $userId]);
         header("location: index.php");
         exit();
       } catch (PDOException $e) {
         $errors[] = "Erreur : $e";
       }
     }
+  }
+  if(!isset($_SESSION["user"])) {
+    header("location: login.php");
+    exit();
   }
 ?>
 <html lang="fr">

@@ -26,6 +26,14 @@
     }
   }
 
+  $date = $currentTask["updated_at"];
+  $update = new DateTime($date);
+  $formatter = new IntlDateFormatter(
+    'fr_FR',
+    IntlDateFormatter::FULL,
+    IntlDateFormatter::MEDIUM
+);
+
 ?>
 <html lang="fr">
   <head>
@@ -44,6 +52,7 @@
     <main>
       <div class="content">
         <h1>Modifier une tâche</h1>
+        <span>Dernière modification le <?= $formatter->format($update); ?></span>
         <?php if (!empty($errors)) { ?>
           <div class="alert alert-dismissible alert-danger">
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
@@ -72,7 +81,7 @@
           </select>
           <label for="taskDueDate" class="form-label mt-4">Date butoire de la tâche :</label>
           <input type="date" class="form-control" id="taskDueDate" name="taskDueDate" placeholder="Date butoire de la tâche" value="<?= $currentTask["due_date"] ?>">
-          <input type="submit" class="btn btn-primary mt-4" value="Créer"></input>
+          <input type="submit" class="btn btn-primary mt-4" value="Modifier"></input>
         </form>
       </div>
     </main>
