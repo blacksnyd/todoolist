@@ -3,7 +3,7 @@
   session_start();
 
   $pdo = dbLog();
-  $request = $pdo->prepare("SELECT * FROM tasks JOIN users ON tasks.user_id = users.id");
+  $request = $pdo->prepare("SELECT tasks.id AS task_id, tasks.title, tasks.description, tasks.status, tasks.priority, tasks.due_date, tasks.created_at, users.id AS user_id, users.username FROM tasks JOIN users ON tasks.user_id = users.id");
   $request->execute();
   $tasks = $request->fetchAll();
 
@@ -16,7 +16,7 @@
   }
   if(isset($_GET["priority"]) ) {
     $priority = $_GET["priority"];
-    $request = $pdo->prepare("SELECT * FROM tasks JOIN users ON tasks.user_id = users.id WHERE priority = ?");
+    $request = $pdo->prepare("SELECT tasks.id AS task_id, tasks.title, tasks.description, tasks.status, tasks.priority, tasks.due_date, tasks.created_at, users.id AS user_id, users.username FROM tasks JOIN users ON tasks.user_id = users.id");
     $request->execute([$priority]);
     $fetchAll = $request->fetchAll();
   }
@@ -67,18 +67,22 @@
               <tr>
                 <td><?= $task["title"] ?></td>
                 <?php include "includes/modal_desc.php"; ?>
-                <td><?= htmlspecialchars(substr($task["description"], 0, 40)) ?>...<a href="" class="text-info" data-toggle="modal" data-target="#<?= $task['id'] ?>">Voir plus</a></td>
+                <td><?= htmlspecialchars(substr($task["description"], 0, 40)) ?>...<a href="" class="text-info" data-toggle="modal" data-target="#<?= $task['task_id'] ?>">Voir plus</a></td>
                 <td><?= htmlspecialchars($task["status"]) ?></td>
                 <td><?= htmlspecialchars($task["priority"]) ?></td>
                 <td><?= htmlspecialchars($task["due_date"]) ?></td>
                 <td><?= htmlspecialchars($task["username"]) ?></td>
                 <td><?= htmlspecialchars($task["created_at"]) ?></td>
-                <td>
-                  <div class="table-actions">
-                    <a href="?delete=1&id=<?= $task["id"] ?>" class="btn btn-danger"><i class="fa-solid fa-trash"></i></a>
-                    <a href="update.php?id=<?= $task["id"] ?>" class="btn btn-info" onClick="alert('mon texte');"><i class="fa-solid fa-pen-to-square"></i></a>
-                  </div>
-                </td>
+                <?php if($task["user_id"] === $_SESSION["user"]["id"]) { ?>
+                  <td>
+                    <div class="table-actions">
+                      <a href="?delete=1&id=<?= $task["task_id"] ?>" class="btn btn-danger" onclick="alert('supprimer');"><i class="fa-solid fa-trash"></i></a>
+                      <a href="update.php?id=<?= $task["task_id"] ?>" class="btn btn-info"><i class="fa-solid fa-pen-to-square"></i></a>
+                    </div>
+                  </td>
+                <?php } else { ?>
+                  <td>Permission requis</td>
+                <?php } ?>
               </tr>
             <?php } ?>
           </tbody>

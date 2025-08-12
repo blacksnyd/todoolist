@@ -1,5 +1,6 @@
 <?php
   require_once "config/db.php";
+  session_start();
 
   $errors = [];
 
@@ -9,6 +10,10 @@
   $request->execute([$taskId]);
   $currentTask = $request->fetch();
 
+  if ($currentTask["user_id"] !== $_SESSION["user"]["id"]) {
+    header("location: index.php");
+    exit();
+  }
 
   if($_SERVER["REQUEST_METHOD"] === "POST") {
     $taskTitle = !empty($_POST["taskTitle"]) ? $_POST["taskTitle"] : $currentTask["title"];
@@ -33,6 +38,7 @@
     IntlDateFormatter::FULL,
     IntlDateFormatter::MEDIUM
 );
+
 
 ?>
 <html lang="fr">

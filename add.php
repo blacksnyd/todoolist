@@ -44,6 +44,7 @@
     header("location: login.php");
     exit();
   }
+
 ?>
 <html lang="fr">
   <head>
